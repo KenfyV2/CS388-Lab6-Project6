@@ -35,4 +35,5 @@ class DetailActivity : AppCompatActivity() {
             .load(article.mediaImageUrl)
             .into(mediaImageView)
     }
+
 }
