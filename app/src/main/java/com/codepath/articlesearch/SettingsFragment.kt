@@ -40,7 +40,6 @@ class SettingsFragment : Fragment() {
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
-            requireActivity().recreate()
         }
 
         return binding.root

@@ -1,8 +1,10 @@
 package com.codepath.articlesearch
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -37,6 +39,14 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val prefs = getSharedPreferences("AppSettings", Context.MODE_PRIVATE)
+        val isDarkModeEnabled = prefs.getBoolean("darkMode", false)
+        if (isDarkModeEnabled) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
@@ -45,22 +55,25 @@ class MainActivity : AppCompatActivity() {
         val bestSellerBooksFragment = BestSellerBooksFragment()
         val articleListFragment = ArticleListFragment()
         val settingsFragment = SettingsFragment()
+        val homeFragment = HomeFragment()
+
 
         val bottomNavigationView: BottomNavigationView = findViewById(R.id.bottom_navigation)
 
         // Handle navigation item selection
         bottomNavigationView.setOnItemSelectedListener { item ->
             val fragment: Fragment = when (item.itemId) {
+                R.id.nav_home -> homeFragment
                 R.id.nav_books -> bestSellerBooksFragment
                 R.id.nav_articles -> articleListFragment
                 R.id.nav_settings -> settingsFragment
-                else -> articleListFragment // Default to articles if no match
+                else -> homeFragment // Default to articles if no match
             }
             replaceFragment(fragment)
             true
         }
 
         // Set default selection to Books
-        bottomNavigationView.selectedItemId = R.id.nav_books
+        bottomNavigationView.selectedItemId = R.id.nav_home
     }
 }
